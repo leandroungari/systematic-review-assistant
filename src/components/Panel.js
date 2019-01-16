@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import ReviewPanel from "./ReviewPanel";
 
 export default class Panel extends Component {
   renderPanel = () => {
-    const { enable } = this.props;
+    const { enable, tab } = this.props;
 
     if (enable) {
-      return (
-        <Grid>
-          <Typography>Panel</Typography>
-        </Grid>
-      );
+      return <ReviewPanel tab={tab} />;
     } else {
       return (
         <Grid

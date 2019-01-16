@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import { init, showReview } from "../data/Review";
+import { init, showSystematicReview } from "../data/Review";
 
 export default class NewReviewDialog extends Component {
   constructor(props) {
@@ -25,14 +25,18 @@ export default class NewReviewDialog extends Component {
     const { initializeReview } = this.props;
     init(title, researchers, description, goals);
     initializeReview();
-    showReview();
+    showSystematicReview();
+  };
+
+  cancelReview = () => {
+    this.props.closeDialog();
   };
 
   render() {
-    const { visible } = this.props;
+    const { visible, closeDialog } = this.props;
 
     return (
-      <Dialog open={visible}>
+      <Dialog open={visible} onClose={closeDialog}>
         <DialogTitle>Nova Revisão</DialogTitle>
         <DialogContent
           style={{
@@ -82,14 +86,29 @@ export default class NewReviewDialog extends Component {
               onChange={event => this.setState({ goals: event.target.value })}
             />
           </form>
-          <Button
-            onClick={this.initReview}
-            variant="contained"
-            color="primary"
-            style={{ marginTop: 25 }}
+          <Grid
+            container
+            justify="space-between"
+            style={{
+              width: 220,
+              marginTop: 25
+            }}
           >
-            Criar
-          </Button>
+            <Button
+              onClick={this.initReview}
+              variant="contained"
+              color="primary"
+            >
+              Criar
+            </Button>
+            <Button
+              onClick={this.cancelReview}
+              variant="contained"
+              color="primary"
+            >
+              Cancelar
+            </Button>
+          </Grid>
         </DialogContent>
       </Dialog>
     );

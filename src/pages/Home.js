@@ -5,16 +5,25 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import IconButton from "@material-ui/core/IconButton";
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
 
 import Menu from "@material-ui/icons/Menu";
 
 import Panel from "../components/Panel";
 import Drawer from "@material-ui/core/Drawer";
 import SideMenu from "../components/SideMenu";
+
 import NewReviewDialog from "../components/NewReviewDialog";
+import OpenReviewDialog from "../components/OpenReviewDialog";
 
 import { saveAs } from "file-saver";
-import { getReview } from "../data/Review";
+import {
+  getSystematicReview,
+  getTitle,
+  openSystematicReview,
+  showSystematicReview
+} from "../data/Review";
 import { monthname } from "../data/Date";
 
 export default class Home extends React.Component {
@@ -24,10 +33,14 @@ export default class Home extends React.Component {
     document.title = "Systematic Review Assistant";
 
     this.state = {
-      isNewReviewActive: false,
+      isNewReviewActive: /*false*/ true,
       isNewReviewDialogVisible: false,
+      isOpenReviewDialogVisible: false,
 
       isDrawerVisible: false,
+
+      tabNumber: 0,
+
       options: [
         {
           type: "option",
@@ -41,14 +54,13 @@ export default class Home extends React.Component {
           type: "option",
           name: "Salvar como ...",
           action: () => {
-            let review = getReview();
             let date = new Date();
 
-            let filename = `${review.title} - ${monthname(
+            let filename = `${getTitle()} - ${monthname(
               date.getMonth()
             )} ${date.getDate()}, ${date.getFullYear()} ${date.getHours()}h${date.getMinutes()}min`;
 
-            let json = JSON.stringify(review);
+            let json = getSystematicReview();
             let blob = new Blob([json], { type: "text/json;charset=utf-8" });
 
             saveAs(blob, filename);
@@ -60,7 +72,10 @@ export default class Home extends React.Component {
         {
           type: "option",
           name: "Abrir",
-          action: () => console.log("Abrir")
+          action: () => {
+            this.hideDrawer();
+            this.showOpenReviewDialog();
+          }
         },
         { type: "divider" },
         {
@@ -79,9 +94,20 @@ export default class Home extends React.Component {
   hideNewReviewDialog = () =>
     this.setState({ isNewReviewDialogVisible: false });
 
+  showOpenReviewDialog = () =>
+    this.setState({ isOpenReviewDialogVisible: true });
+  hideOpenReviewDialog = () =>
+    this.setState({ isOpenReviewDialogVisible: false });
+
   initializeReview = () => {
     this.setState({ isNewReviewActive: true });
     this.hideNewReviewDialog();
+  };
+
+  openReview = data => {
+    openSystematicReview(data);
+    showSystematicReview();
+    this.setState({ isNewReviewActive: true });
   };
 
   render() {
@@ -89,13 +115,18 @@ export default class Home extends React.Component {
       isNewReviewActive,
       isDrawerVisible,
       options,
-      isNewReviewDialogVisible
+      isNewReviewDialogVisible,
+      isOpenReviewDialogVisible,
+      tabNumber
     } = this.state;
 
     return (
       <div>
         <CssBaseline />
-        <AppBar position="static">
+        <AppBar
+          position="static"
+          style={{ display: "flex", flexDirection: "row" }}
+        >
           <Toolbar>
             <IconButton color="inherit" onClick={this.showDrawer}>
               <Menu />
@@ -104,14 +135,37 @@ export default class Home extends React.Component {
               Systematic Review Assistant
             </Typography>
           </Toolbar>
+          <Tabs
+            style={{
+              display: isNewReviewActive ? "flex" : "none",
+              marginLeft: "150px",
+              alignItems: "flex-end"
+            }}
+            value={tabNumber}
+            onChange={(event, newValue) => {
+              this.setState({ tabNumber: newValue });
+            }}
+          >
+            <Tab label="Todos Estudos" />
+            <Tab label="Seleção Inicial" />
+            <Tab label="Seleção Final" />
+            <Tab label="Resultado Final" />
+          </Tabs>
         </AppBar>
         <Drawer open={isDrawerVisible} onClose={this.hideDrawer}>
           <SideMenu options={options} />
         </Drawer>
-        <Panel enable={isNewReviewActive} />
+        <Panel enable={isNewReviewActive} tab={tabNumber} />
+
         <NewReviewDialog
+          closeDialog={this.hideNewReviewDialog}
           visible={isNewReviewDialogVisible}
           initializeReview={this.initializeReview}
+        />
+        <OpenReviewDialog
+          closeDialog={this.hideOpenReviewDialog}
+          visible={isOpenReviewDialogVisible}
+          openReview={this.openReview}
         />
       </div>
     );

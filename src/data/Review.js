@@ -19,20 +19,38 @@ const init = (title, researchers, description, goals) => {
   };
 };
 
-const showReview = () => {
+const showSystematicReview = () => {
   console.log(review);
 };
 
-const getReview = () => {
-  return review;
+const getSystematicReview = () => {
+  return JSON.stringify(review);
+};
+
+const openSystematicReview = data => {
+  review = JSON.parse(data);
+};
+
+const getTitle = () => {
+  return review.title;
 };
 
 const article = id => review.articles.filter(a => a.id === id)[0];
 
-const addArticle = (id, name, authors, year, base, abstract, doi) => {
+const addArticle = (
+  id,
+  name,
+  authors,
+  year,
+  base,
+  abstract,
+  booktitle,
+  doi,
+  bibtex
+) => {
   review.articles = [
     ...review.articles,
-    { id, name, authors, year, base, abstract, doi }
+    { id, name, authors, year, base, abstract, booktitle, doi, bibtex }
   ];
 };
 
@@ -81,8 +99,10 @@ export {
   addArticle,
   article,
   result,
-  showReview,
-  getReview,
+  showSystematicReview,
   setAnalysis,
-  setReview
+  setReview,
+  getSystematicReview,
+  getTitle,
+  openSystematicReview
 };
