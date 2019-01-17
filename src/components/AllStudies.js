@@ -18,7 +18,14 @@ export default class AllStudies extends Component {
       >
         <TableViewer
           rows={articles}
-          titles={["Título", "Autor(es)", "Ano", "Base Bibliográfica", "DOI"]}
+          titles={[
+            "Título",
+            "Autor(es)",
+            "Ano",
+            "Base Bibliográfica",
+            "Título do Livro",
+            "DOI"
+          ]}
           renderRow={({
             id,
             name,
@@ -30,11 +37,16 @@ export default class AllStudies extends Component {
             doi,
             bibtex
           }) => (
-            <TableRow key={id}>
-              <TableCell style={{ minWidth: 300 }}>{name}</TableCell>
+            <TableRow
+              key={id}
+              style={{ cursor: "pointer" }}
+              onClick={() => console.log(id)}
+            >
+              <TableCell style={{ minWidth: 350 }}>{name}</TableCell>
               <TableCell style={{ minWidth: 300 }}>{authors}</TableCell>
               <TableCell>{year}</TableCell>
               <TableCell>{base}</TableCell>
+              <TableCell style={{ minWidth: 300 }}>{booktitle}</TableCell>
               <TableCell>{doi}</TableCell>
             </TableRow>
           )}

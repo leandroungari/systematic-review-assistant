@@ -9,7 +9,14 @@ import FinalResult from "./FinalResult";
 import AddSearchDialog from "./AddSearchDialog";
 
 import bibtextParser from "bibtex-parse-js";
-import { addArticle, showSystematicReview, articles } from "../data/Review";
+import {
+  addArticle,
+  showSystematicReview,
+  articles,
+  firsts,
+  seconds,
+  results
+} from "../data/Review";
 
 export default class ReviewPanel extends Component {
   constructor(props) {
@@ -85,9 +92,9 @@ export default class ReviewPanel extends Component {
           }}
         >
           {tab === 0 && <AllStudies articles={articles()} />}
-          {tab === 1 && <FirstSelection />}
-          {tab === 2 && <FinalSelection />}
-          {tab === 3 && <FinalResult />}
+          {tab === 1 && <FirstSelection articles={firsts()} />}
+          {tab === 2 && <FinalSelection articles={seconds()} />}
+          {tab === 3 && <FinalResult articles={results()} />}
         </Grid>
         <AddSearchDialog
           closeDialog={this.hideAddSearch}

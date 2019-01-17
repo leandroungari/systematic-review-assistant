@@ -30,9 +30,25 @@ const firsts = () => {
   return review.first;
 };
 const seconds = () => {
+  review.second = review.first
+    .filter(
+      ({ analysis, review }) =>
+        analysis.result === RESULT_ACCEPT &&
+        review.researchers === RESULT_ACCEPT
+    )
+    .map(({ id }) => ({ id }));
+
   return review.second;
 };
 const results = () => {
+  review.result = review.second
+    .filter(
+      ({ analysis, review }) =>
+        analysis.result === RESULT_ACCEPT &&
+        review.researchers === RESULT_ACCEPT
+    )
+    .map(({ id }) => ({ id }));
+
   return review.result;
 };
 
@@ -65,25 +81,28 @@ const addArticle = (
     ...review.articles,
     { id, name, authors, year, base, abstract, booktitle, doi, bibtex }
   ];
-};
 
-const accept = (criterion, set, id) => {
-  review[set] = [
-    ...review[set],
-    { id, analysis: { result: RESULT_ACCEPT, criterion } }
-  ];
-};
+  const contains = review.first.filter(identifier => {
+    const item = article(identifier);
+    if (name === item.name) return true;
+    else return false;
+  })[0];
 
-const reject = (criterion, set, id) => {
-  review[set] = [
-    ...review[set],
-    { id, analysis: { result: RESULT_REJECT, criterion } }
-  ];
+  if (!contains) review.first = [...review.first, { id }];
 };
 
 const setAnalysis = (id, set, result, criterion) => {
-  if (result) accept(criterion, set, id);
-  else reject(criterion, set, id);
+  review[set] = review[set].map(a => {
+    if (a.id === id) {
+      return {
+        id: a.id,
+        analysis: {
+          result,
+          criterion
+        }
+      };
+    } else return a;
+  });
 };
 
 const setReview = (id, set, result, criterion) => {

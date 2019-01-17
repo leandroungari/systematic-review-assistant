@@ -16,6 +16,7 @@ import FirstPage from "@material-ui/icons/FirstPage";
 import LastPage from "@material-ui/icons/LastPage";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import { Grid } from "@material-ui/core";
 
 export default class TableViewer extends Component {
   constructor(props) {
@@ -42,17 +43,27 @@ export default class TableViewer extends Component {
     const { page, rowsPerPage } = this.state;
     const { rows, titles } = this.props;
 
-    console.table(titles);
-
     if (rows === undefined || rows.length === 0) {
-      return <Typography>Não há registros</Typography>;
+      return (
+        <Grid
+          style={{
+            display: "flex",
+            width: "100%",
+            height: 400,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Typography>Não há registros</Typography>
+        </Grid>
+      );
     } else
       return (
         <Table style={{ minWidth: "100%" }}>
           <TableHead>
             <TableRow>
-              {titles.map(a => (
-                <TableCell>{a}</TableCell>
+              {titles.map((a, index) => (
+                <TableCell key={index}>{a}</TableCell>
               ))}
             </TableRow>
           </TableHead>
