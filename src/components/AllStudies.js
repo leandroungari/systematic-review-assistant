@@ -8,7 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 export default class AllStudies extends Component {
   render() {
     const { articles } = this.props;
-
+    console.table(articles);
     return (
       <Grid
         style={{
@@ -36,20 +36,22 @@ export default class AllStudies extends Component {
             booktitle,
             doi,
             bibtex
-          }) => (
-            <TableRow
-              key={id}
-              style={{ cursor: "pointer" }}
-              onClick={() => console.log(id)}
-            >
-              <TableCell style={{ minWidth: 350 }}>{name}</TableCell>
-              <TableCell style={{ minWidth: 300 }}>{authors}</TableCell>
-              <TableCell>{year}</TableCell>
-              <TableCell>{base}</TableCell>
-              <TableCell style={{ minWidth: 300 }}>{booktitle}</TableCell>
-              <TableCell>{doi}</TableCell>
-            </TableRow>
-          )}
+          }) => {
+            return (
+              <TableRow
+                key={id}
+                style={{ cursor: "pointer" }}
+                onClick={() => console.log(id)}
+              >
+                <TableCell style={{ minWidth: 350 }}>{name}</TableCell>
+                <TableCell style={{ minWidth: 300 }}>{authors}</TableCell>
+                <TableCell>{year}</TableCell>
+                <TableCell>{base.join("/")}</TableCell>
+                <TableCell style={{ minWidth: 300 }}>{booktitle}</TableCell>
+                <TableCell>{doi}</TableCell>
+              </TableRow>
+            );
+          }}
         />
       </Grid>
     );

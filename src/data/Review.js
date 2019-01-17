@@ -26,13 +26,34 @@ const showSystematicReview = () => {
 const articles = () => {
   return review.articles;
 };
+
 const firsts = () => {
+  let titles = [];
+  review.first = [];
+  let baseSet = {};
+
+  for (const article of review.articles) {
+    baseSet[article.name] = [
+      ...(baseSet[article.name] ? baseSet[article.name] : []),
+      article.base
+    ];
+    if (titles.includes(article.name)) {
+      review.articles.map(a => a.name === article.name);
+    } else {
+      titles = [...titles, article.name];
+      review.first = [...review.first, { id: article.id }];
+    }
+  }
+
   return review.first;
 };
 const seconds = () => {
+  if (!review.first) return [];
   review.second = review.first
     .filter(
       ({ analysis, review }) =>
+        analysis &&
+        review &&
         analysis.result === RESULT_ACCEPT &&
         review.researchers === RESULT_ACCEPT
     )
@@ -41,9 +62,12 @@ const seconds = () => {
   return review.second;
 };
 const results = () => {
+  if (!review.second) return [];
   review.result = review.second
     .filter(
       ({ analysis, review }) =>
+        analysis &&
+        review &&
         analysis.result === RESULT_ACCEPT &&
         review.researchers === RESULT_ACCEPT
     )
@@ -67,7 +91,6 @@ const getTitle = () => {
 const article = id => review.articles.filter(a => a.id === id)[0];
 
 const addArticle = (
-  id,
   name,
   authors,
   year,
@@ -77,18 +100,11 @@ const addArticle = (
   doi,
   bibtex
 ) => {
+  const id = `${base}${review.articles.length}`;
   review.articles = [
     ...review.articles,
-    { id, name, authors, year, base, abstract, booktitle, doi, bibtex }
+    { id, name, authors, year, base: [base], abstract, booktitle, doi, bibtex }
   ];
-
-  const contains = review.first.filter(identifier => {
-    const item = article(identifier);
-    if (name === item.name) return true;
-    else return false;
-  })[0];
-
-  if (!contains) review.first = [...review.first, { id }];
 };
 
 const setAnalysis = (id, set, result, criterion) => {

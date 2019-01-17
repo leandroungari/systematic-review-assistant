@@ -49,7 +49,6 @@ export default class ReviewPanel extends Component {
     entries.forEach((entry, index) => {
       const { abstract, author, booktitle, doi, title, year } = entry.entryTags;
       addArticle(
-        `${base}${index}`,
         title,
         author,
         Number.parseInt(year),

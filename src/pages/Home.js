@@ -33,7 +33,7 @@ export default class Home extends React.Component {
     document.title = "Systematic Review Assistant";
 
     this.state = {
-      isNewReviewActive: /*false*/ true,
+      isNewReviewActive: false,
       isNewReviewDialogVisible: false,
       isOpenReviewDialogVisible: false,
 

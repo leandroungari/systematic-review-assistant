@@ -22,32 +22,43 @@ export default class FirstSelection extends Component {
           rows={articles}
           titles={[
             "Título",
+            "Resumo",
             "Autor(es)",
             "Ano",
             "Base Bibliográfica",
-            "Título do Livro",
-            "DOI"
+            "Análise",
+            "Revisão da Análise"
           ]}
           renderRow={({ id, analysis, review }) => {
             const { name, authors, abstract, year, base } = article(id);
 
+            let resultAnalysis = "";
+            if (!analysis) resultAnalysis = "Não analisado";
+            else if (analysis.result)
+              resultAnalysis = `Aceito:${analysis.criterion}`;
+            else resultAnalysis = `Excluído:${analysis.criterion}`;
+
+            let resultReview = "";
+            if (!review) resultReview = "Não revisado";
+            else if (review.result) resultReview = `Aceito:${review.criterion}`;
+            else resultReview = `Excluído:${review.criterion}`;
+
             return (
-              <TableRow
-                key={id}
-                style={{ cursor: "pointer" }}
-                onClick={() => console.log(id)}
-              >
-                <TableCell style={{ minWidth: 350 }}>{name}</TableCell>
-                <TableCell style={{ maxWidth: 500 }}>{abstract}</TableCell>
-                <TableCell style={{ minWidth: 300 }}>{authors}</TableCell>
+              <TableRow key={id}>
+                <TableCell
+                  style={{ minWidth: 300, cursor: "pointer" }}
+                  onClick={() => console.log(id)}
+                >
+                  {name}
+                </TableCell>
+                <TableCell style={{ minWidth: 550 }} align="justify">
+                  {abstract}
+                </TableCell>
+                <TableCell style={{ minWidth: 250 }}>{authors}</TableCell>
                 <TableCell>{year}</TableCell>
-                <TableCell>{base}</TableCell>
-                <TableCell>{`${analysis.result ? "Aceito" : "Excluído"}:${
-                  analysis.criterion
-                }`}</TableCell>
-                <TableCell>{`${review.result ? "Aceito" : "Excluído"}:${
-                  review.criterion
-                }`}</TableCell>
+                <TableCell>{base.join("/")}</TableCell>
+                <TableCell>{resultAnalysis}</TableCell>
+                <TableCell>{resultReview}</TableCell>
               </TableRow>
             );
           }}
