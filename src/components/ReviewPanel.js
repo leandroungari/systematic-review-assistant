@@ -9,7 +9,7 @@ import FinalResult from "./FinalResult";
 import AddSearchDialog from "./AddSearchDialog";
 
 import bibtextParser from "bibtex-parse-js";
-import { addArticle, showSystematicReview } from "../data/Review";
+import { addArticle, showSystematicReview, articles } from "../data/Review";
 
 export default class ReviewPanel extends Component {
   constructor(props) {
@@ -66,6 +66,7 @@ export default class ReviewPanel extends Component {
         container
         style={{
           display: "flex",
+          flexWrap: "nowrap",
           flexDirection: "row"
         }}
       >
@@ -83,7 +84,7 @@ export default class ReviewPanel extends Component {
             padding: "25px 20px"
           }}
         >
-          {tab === 0 && <AllStudies />}
+          {tab === 0 && <AllStudies articles={articles()} />}
           {tab === 1 && <FirstSelection />}
           {tab === 2 && <FinalSelection />}
           {tab === 3 && <FinalResult />}

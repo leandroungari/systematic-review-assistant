@@ -23,6 +23,19 @@ const showSystematicReview = () => {
   console.log(review);
 };
 
+const articles = () => {
+  return review.articles;
+};
+const firsts = () => {
+  return review.first;
+};
+const seconds = () => {
+  return review.second;
+};
+const results = () => {
+  return review.result;
+};
+
 const getSystematicReview = () => {
   return JSON.stringify(review);
 };
@@ -88,8 +101,6 @@ const setReview = (id, set, result, criterion) => {
   });
 };
 
-const result = () => (review.result = review.second.accept.map(({ id }) => id));
-
 export {
   FIRST_SET,
   SECOND_SET,
@@ -98,11 +109,14 @@ export {
   init,
   addArticle,
   article,
-  result,
   showSystematicReview,
   setAnalysis,
   setReview,
   getSystematicReview,
   getTitle,
-  openSystematicReview
+  openSystematicReview,
+  articles,
+  firsts,
+  seconds,
+  results
 };

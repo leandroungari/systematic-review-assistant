@@ -1,29 +1,41 @@
 import React, { Component } from "react";
 import TableViewer from "./TableViewer";
 
+import Grid from "@material-ui/core/Grid";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+
 export default class AllStudies extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      articles: []
-    };
-  }
-
   render() {
-    const { articles } = this.state;
+    const { articles } = this.props;
 
     return (
-      <Grid>
+      <Grid
+        style={{
+          maxWidth: 0.75 * window.innerWidth,
+          overflowX: "auto"
+        }}
+      >
         <TableViewer
           rows={articles}
-          renderRow={row => (
-            <TableRow key={row.id}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell numeric>{row.calories}</TableCell>
-              <TableCell numeric>{row.fat}</TableCell>
+          titles={["Título", "Autor(es)", "Ano", "Base Bibliográfica", "DOI"]}
+          renderRow={({
+            id,
+            name,
+            authors,
+            year,
+            base,
+            abstract,
+            booktitle,
+            doi,
+            bibtex
+          }) => (
+            <TableRow key={id}>
+              <TableCell style={{ minWidth: 300 }}>{name}</TableCell>
+              <TableCell style={{ minWidth: 300 }}>{authors}</TableCell>
+              <TableCell>{year}</TableCell>
+              <TableCell>{base}</TableCell>
+              <TableCell>{doi}</TableCell>
             </TableRow>
           )}
         />

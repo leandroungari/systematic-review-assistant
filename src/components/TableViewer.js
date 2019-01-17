@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { useTheme } from "@material-ui/styles";
+import { withTheme } from "@material-ui/core/styles/";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,6 +9,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import TableHead from "@material-ui/core/TableHead";
 
 import FirstPage from "@material-ui/icons/FirstPage";
 import LastPage from "@material-ui/icons/LastPage";
@@ -38,97 +40,115 @@ export default class TableViewer extends Component {
 
   render() {
     const { page, rowsPerPage } = this.state;
-    const { rows } = this.props;
+    const { rows, titles } = this.props;
 
-    return (
-      <Table>
-        <TableBody>
-          {rows
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map(row => (
+    console.table(titles);
 
-            ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25, 50]}
-              colSpan={3}
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                native: true
-              }}
-              onChangePage={this.changePage}
-              onChangeRowsPerPage={this.changeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    );
+    if (rows === undefined || rows.length === 0) {
+      return <Typography>Não há registros</Typography>;
+    } else
+      return (
+        <Table style={{ minWidth: "100%" }}>
+          <TableHead>
+            <TableRow>
+              {titles.map(a => (
+                <TableCell>{a}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(row => this.props.renderRow(row))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                colSpan={3}
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  native: true
+                }}
+                onChangePage={this.changePage}
+                onChangeRowsPerPage={this.changeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      );
   }
 }
 
-function TablePaginationActions(props) {
-  const theme = useTheme();
-  const { count, page, rowsPerPage, onChangePage } = props;
+class TablePaginationActions extends Component {
+  handleFirstPageButtonClick = event => {
+    this.props.onChangePage(event, 0);
+  };
 
-  function handleFirstPageButtonClick(event) {
-    onChangePage(event, 0);
+  handleBackButtonClick = event => {
+    const { page } = this.props;
+    this.props.onChangePage(event, page - 1);
+  };
+
+  handleNextButtonClick = event => {
+    const { page } = this.props;
+    this.props.onChangePage(event, page + 1);
+  };
+
+  handleLastPageButtonClick = event => {
+    const { count, rowsPerPage } = this.props;
+    this.props.onChangePage(
+      event,
+      Math.max(0, Math.ceil(count / rowsPerPage) - 1)
+    );
+  };
+
+  render() {
+    const theme = withTheme();
+    const { count, page, rowsPerPage } = this.props;
+
+    return (
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <IconButton
+          onClick={this.handleFirstPageButtonClick}
+          disabled={page === 0}
+          aria-label="Primeira Página"
+        >
+          {theme.direction === "rtl" ? <LastPage /> : <FirstPage />}
+        </IconButton>
+        <IconButton
+          onClick={this.handleBackButtonClick}
+          disabled={page === 0}
+          aria-label="Página Anterior"
+        >
+          {theme.direction === "rtl" ? (
+            <KeyboardArrowRight />
+          ) : (
+            <KeyboardArrowLeft />
+          )}
+        </IconButton>
+        <IconButton
+          onClick={this.handleNextButtonClick}
+          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          aria-label="Próxima Página"
+        >
+          {theme.direction === "rtl" ? (
+            <KeyboardArrowLeft />
+          ) : (
+            <KeyboardArrowRight />
+          )}
+        </IconButton>
+        <IconButton
+          onClick={this.handleLastPageButtonClick}
+          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          aria-label="Última Página"
+        >
+          {theme.direction === "rtl" ? <FirstPage /> : <LastPage />}
+        </IconButton>
+      </div>
+    );
   }
-
-  function handleBackButtonClick(event) {
-    onChangePage(event, page - 1);
-  }
-
-  function handleNextButtonClick(event) {
-    onChangePage(event, page + 1);
-  }
-
-  function handleLastPageButtonClick(event) {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  }
-
-  return (
-    <div>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="Primeira Página"
-      >
-        {theme.direction === "rtl" ? <LastPage /> : <FirstPage />}
-      </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="Página Anterior"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="Próxima Página"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="Última Página"
-      >
-        {theme.direction === "rtl" ? <FirstPage /> : <LastPage />}
-      </IconButton>
-    </div>
-  );
 }
