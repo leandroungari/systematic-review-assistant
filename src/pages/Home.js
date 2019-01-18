@@ -63,7 +63,7 @@ export default class Home extends React.Component {
             let json = getSystematicReview();
             let blob = new Blob([json], { type: "text/json;charset=utf-8" });
 
-            saveAs(blob, filename);
+            saveAs(blob, `${filename}.json`);
 
             this.hideDrawer();
           }

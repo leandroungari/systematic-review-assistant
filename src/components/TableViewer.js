@@ -59,7 +59,7 @@ export default class TableViewer extends Component {
       );
     } else
       return (
-        <Table style={{ minWidth: "100%" }}>
+        <Table>
           <TableHead>
             <TableRow>
               {titles.map((a, index) => (

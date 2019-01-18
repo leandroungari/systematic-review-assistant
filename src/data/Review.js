@@ -12,6 +12,8 @@ const init = (title, researchers, description, goals) => {
     researchers,
     description,
     goals,
+    addCriterion: [],
+    deleteCriterion: [],
     articles: [],
     first: [],
     second: [],

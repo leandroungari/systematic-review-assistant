@@ -32,6 +32,16 @@ export default class ReviewPanel extends Component {
         },
         {
           type: "option",
+          name: "Critérios de Aceitação",
+          action: () => console.log("aceitacao")
+        },
+        {
+          type: "option",
+          name: "Critérios de Rejeição",
+          action: () => console.log("rejeicao")
+        },
+        {
+          type: "option",
           name: "Mostrar Itens de Pesquisa Duplicados",
           action: () => {}
         }
