@@ -7,6 +7,8 @@ import FinalSelection from "./FinalSelection";
 import FinalResult from "./FinalResult";
 
 import AddSearchDialog from "./AddSearchDialog";
+import AddAcceptDialog from "./AddAcceptDialog";
+import AddRejectDialog from "./AddRejectDialog";
 
 import bibtextParser from "bibtex-parse-js";
 import {
@@ -15,7 +17,9 @@ import {
   articles,
   firsts,
   seconds,
-  results
+  results,
+  addCriterion,
+  deleteCriterion
 } from "../data/Review";
 
 export default class ReviewPanel extends Component {
@@ -24,6 +28,8 @@ export default class ReviewPanel extends Component {
 
     this.state = {
       isAddSearchModalVisible: false,
+      isAddCriteriaModalVisible: false,
+      isDeleteCriteriaModalVisible: false,
       options: [
         {
           type: "option",
@@ -33,12 +39,12 @@ export default class ReviewPanel extends Component {
         {
           type: "option",
           name: "Critérios de Aceitação",
-          action: () => console.log("aceitacao")
+          action: () => this.showAddCriteria()
         },
         {
           type: "option",
           name: "Critérios de Rejeição",
-          action: () => console.log("rejeicao")
+          action: () => this.showDeleteCriteria()
         },
         {
           type: "option",
@@ -51,6 +57,22 @@ export default class ReviewPanel extends Component {
 
   showAddSearch = () => this.setState({ isAddSearchModalVisible: true });
   hideAddSearch = () => this.setState({ isAddSearchModalVisible: false });
+
+  showAddCriteria = () => this.setState({ isAddCriteriaModalVisible: true });
+  hideAddCriteria = () => this.setState({ isAddCriteriaModalVisible: false });
+
+  showDeleteCriteria = () =>
+    this.setState({ isDeleteCriteriaModalVisible: true });
+  hideDeleteCriteria = () =>
+    this.setState({ isDeleteCriteriaModalVisible: false });
+
+  addCriteria = criteria => {
+    addCriterion(criteria);
+  };
+
+  deleteCriteria = criteria => {
+    deleteCriterion(criteria);
+  };
 
   loadBibTexFile = (base, text) => {
     const entries = bibtextParser.toJSON(text);
@@ -74,7 +96,12 @@ export default class ReviewPanel extends Component {
   };
 
   render() {
-    const { options, isAddSearchModalVisible } = this.state;
+    const {
+      options,
+      isAddSearchModalVisible,
+      isAddCriteriaModalVisible,
+      isDeleteCriteriaModalVisible
+    } = this.state;
     const { tab } = this.props;
 
     return (
@@ -109,6 +136,16 @@ export default class ReviewPanel extends Component {
           closeDialog={this.hideAddSearch}
           visible={isAddSearchModalVisible}
           loadFile={this.loadBibTexFile}
+        />
+        <AddAcceptDialog
+          closeDialog={this.hideAddCriteria}
+          visible={isAddCriteriaModalVisible}
+          addCriteria={this.addCriteria}
+        />
+        <AddRejectDialog
+          closeDialog={this.hideDeleteCriteria}
+          visible={isDeleteCriteriaModalVisible}
+          addCriteria={this.deleteCriteria}
         />
       </Grid>
     );

@@ -21,6 +21,30 @@ const init = (title, researchers, description, goals) => {
   };
 };
 
+const addCriterion = criteria => {
+  review.addCriterion = [
+    ...(review.addCriterion ? review.addCriterion : []),
+    {
+      id: `CA${review.addCriterion ? review.addCriterion.length : 0}`,
+      criterion: criteria
+    }
+  ];
+
+  showSystematicReview();
+};
+
+const deleteCriterion = criteria => {
+  review.deleteCriterion = [
+    ...(review.deleteCriterion ? review.deleteCriterion : []),
+    {
+      id: `CA${review.deleteCriterion ? review.deleteCriterion.length : 0}`,
+      criterion: criteria
+    }
+  ];
+
+  showSystematicReview();
+};
+
 const showSystematicReview = () => {
   console.log(review);
 };
@@ -155,5 +179,7 @@ export {
   articles,
   firsts,
   seconds,
-  results
+  results,
+  addCriterion,
+  deleteCriterion
 };

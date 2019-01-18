@@ -5,6 +5,7 @@ import TableViewer from "./TableViewer";
 import Grid from "@material-ui/core/Grid";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
+import Tooltip from "@material-ui/core/Tooltip";
 import { article, RESULT_ACCEPT, RESULT_REJECT } from "../data/Review";
 
 import DoneAllOutlined from "@material-ui/icons/DoneAllOutlined";
@@ -34,19 +35,37 @@ export default class FinalSelection extends Component {
   };
 
   calculateStatus = (analysis, review) => {
-    if (!analysis && !review) return <IndeterminateCheckBoxOutlined />;
+    if (!analysis && !review)
+      return (
+        <Tooltip title="Não analisado">
+          <IndeterminateCheckBoxOutlined />
+        </Tooltip>
+      );
     else if (
       (analysis.result === RESULT_ACCEPT && review.result === RESULT_ACCEPT) ||
       (analysis.result === RESULT_REJECT && review.result === RESULT_REJECT)
     )
-      return <DoneAllOutlined />;
+      return (
+        <Tooltip title="Revisado">
+          <DoneAllOutlined />
+        </Tooltip>
+      );
     else if (
       (analysis.result === RESULT_ACCEPT ||
         analysis.result === RESULT_REJECT) &&
       !review
     )
-      return <DoneOutlined />;
-    else return <WarningOutlined />;
+      return (
+        <Tooltip title="Analisado/Não Revisado">
+          <DoneOutlined />
+        </Tooltip>
+      );
+    else
+      return (
+        <Tooltip title="Indeterminado">
+          <WarningOutlined />
+        </Tooltip>
+      );
   };
 
   render() {
