@@ -30,8 +30,6 @@ export default class AllStudies extends Component {
       })
     );
 
-    console.log(data);
-
     return (
       <Grid container>
         <Grid
@@ -83,6 +81,7 @@ export default class AllStudies extends Component {
           container
           direction="column"
           style={{
+            display: articles.length === 0 ? "none" : "flex",
             padding: "30px 0"
           }}
         >
