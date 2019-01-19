@@ -30,6 +30,7 @@ export default class ReviewPanel extends Component {
       isAddSearchModalVisible: false,
       isAddCriteriaModalVisible: false,
       isDeleteCriteriaModalVisible: false,
+      reload: false,
       options: [
         {
           type: "option",
@@ -95,6 +96,10 @@ export default class ReviewPanel extends Component {
     showSystematicReview();
   };
 
+  reloadTab = () => {
+    this.setState({ reload: true });
+  };
+
   render() {
     const {
       options,
@@ -127,10 +132,18 @@ export default class ReviewPanel extends Component {
             padding: "25px 20px"
           }}
         >
-          {tab === 0 && <AllStudies articles={articles()} />}
-          {tab === 1 && <FirstSelection articles={firsts()} />}
-          {tab === 2 && <FinalSelection articles={seconds()} />}
-          {tab === 3 && <FinalResult articles={results()} />}
+          {tab === 0 && (
+            <AllStudies reloadTab={this.reloadTab} articles={articles()} />
+          )}
+          {tab === 1 && (
+            <FirstSelection reloadTab={this.reloadTab} articles={firsts()} />
+          )}
+          {tab === 2 && (
+            <FinalSelection reloadTab={this.reloadTab} articles={seconds()} />
+          )}
+          {tab === 3 && (
+            <FinalResult reloadTab={this.reloadTab} articles={results()} />
+          )}
         </Grid>
         <AddSearchDialog
           closeDialog={this.hideAddSearch}

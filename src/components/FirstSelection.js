@@ -18,17 +18,45 @@ import GenerateCSV from "./GenerateCSV";
 import { monthname } from "../data/Date";
 import { getTitle } from "../data/Review";
 
+import Link from "@material-ui/core/Link";
+
+import StatusDialog from "./ArticleStatusDialog";
+
 export default class FirstSelection extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isStatusDialogVisible: false,
+      articleId: ""
+    };
+  }
+
+  getSnapshotBeforeUpdate() {
+    console.log("aqui");
+  }
+
+  showStatusDialog = id =>
+    this.setState({ isStatusDialogVisible: true, articleId: id });
+  hideStatusDialog = () => {
+    this.setState({
+      isStatusDialogVisible: false
+    });
+    this.props.reloadTab();
+  };
+
   processStatus = (analysis, review) => {
     let resultAnalysis = "";
     if (!analysis) resultAnalysis = "Não analisado";
-    else if (analysis.result) resultAnalysis = `Aceito:${analysis.criterion}`;
-    else resultAnalysis = `Excluído:${analysis.criterion}`;
+    else if (analysis.result)
+      resultAnalysis = `Aceito: ${analysis.criterion.join(", ")}`;
+    else resultAnalysis = `Rejeitado: ${analysis.criterion.join(", ")}`;
 
     let resultReview = "";
     if (!review) resultReview = "Não revisado";
-    else if (review.result) resultReview = `Aceito:${review.criterion}`;
-    else resultReview = `Excluído:${review.criterion}`;
+    else if (review.result)
+      resultReview = `Aceito: ${review.criterion.join(", ")}`;
+    else resultReview = `Rejeitado: ${review.criterion.join(", ")}`;
 
     return { resultAnalysis, resultReview };
   };
@@ -68,8 +96,8 @@ export default class FirstSelection extends Component {
   };
 
   render() {
+    const { isStatusDialogVisible, articleId } = this.state;
     const { articles } = this.props;
-
     const date = new Date();
     let filename = `${getTitle()} - Seleção Inicial - ${monthname(
       date.getMonth()
@@ -114,7 +142,7 @@ export default class FirstSelection extends Component {
               "Revisão da Análise"
             ]}
             renderRow={({ id, analysis, review }) => {
-              const { name, authors, abstract, year, base } = article(id);
+              const { name, authors, abstract, year, base, doi } = article(id);
 
               const { resultAnalysis, resultReview } = this.processStatus(
                 analysis,
@@ -123,14 +151,22 @@ export default class FirstSelection extends Component {
 
               return (
                 <TableRow key={id}>
-                  <TableCell>
+                  <TableCell
+                    style={{ cursor: "pointer" }}
+                    onClick={event => this.showStatusDialog(id)}
+                  >
                     {this.calculateStatus(analysis, review)}
                   </TableCell>
-                  <TableCell
-                    style={{ minWidth: 300, cursor: "pointer" }}
-                    onClick={() => console.log(id)}
-                  >
-                    {name}
+                  <TableCell style={{ minWidth: 300, cursor: "pointer" }}>
+                    <Typography>
+                      <Link
+                        target="_blank"
+                        color="inherit"
+                        href={`http://doi.org/${doi}`}
+                      >
+                        {name}
+                      </Link>
+                    </Typography>
                   </TableCell>
                   <TableCell style={{ minWidth: 550 }} align="justify">
                     {abstract}
@@ -168,6 +204,11 @@ export default class FirstSelection extends Component {
             filename={filename}
           />
         </Grid>
+        <StatusDialog
+          closeDialog={this.hideStatusDialog}
+          visible={isStatusDialogVisible}
+          articleId={articleId}
+        />
       </Grid>
     );
   }

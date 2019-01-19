@@ -21,6 +21,14 @@ const init = (title, researchers, description, goals) => {
   };
 };
 
+const listAddCriterion = () => {
+  return review.addCriterion ? review.addCriterion : [];
+};
+
+const listDeleteCriterion = () => {
+  return review.deleteCriterion ? review.deleteCriterion : [];
+};
+
 const addCriterion = criteria => {
   review.addCriterion = [
     ...(review.addCriterion ? review.addCriterion : []),
@@ -37,7 +45,7 @@ const deleteCriterion = criteria => {
   review.deleteCriterion = [
     ...(review.deleteCriterion ? review.deleteCriterion : []),
     {
-      id: `CA${review.deleteCriterion ? review.deleteCriterion.length : 0}`,
+      id: `CR${review.deleteCriterion ? review.deleteCriterion.length : 0}`,
       criterion: criteria
     }
   ];
@@ -181,5 +189,7 @@ export {
   seconds,
   results,
   addCriterion,
-  deleteCriterion
+  deleteCriterion,
+  listAddCriterion,
+  listDeleteCriterion
 };

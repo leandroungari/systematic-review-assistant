@@ -4,7 +4,7 @@ import TableViewer from "./TableViewer";
 import Grid from "@material-ui/core/Grid";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import { Typography } from "@material-ui/core";
+import { Typography, Link } from "@material-ui/core";
 import GenerateCSV from "./GenerateCSV";
 
 import { monthname } from "../data/Date";
@@ -71,7 +71,19 @@ export default class AllStudies extends Component {
                   <TableCell>{year}</TableCell>
                   <TableCell>{base.join("/")}</TableCell>
                   <TableCell style={{ minWidth: 300 }}>{booktitle}</TableCell>
-                  <TableCell>{doi}</TableCell>
+                  <TableCell>
+                    <Typography>
+                      {doi ? (
+                        <Link
+                          target="_blank"
+                          color="inherit"
+                          href={`http://doi.org/${doi}`}
+                        >
+                          {doi}
+                        </Link>
+                      ) : null}
+                    </Typography>
+                  </TableCell>
                 </TableRow>
               );
             }}

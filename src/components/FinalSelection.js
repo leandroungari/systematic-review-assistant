@@ -23,13 +23,15 @@ export default class FinalSelection extends Component {
   processStatus = (analysis, review) => {
     let resultAnalysis = "";
     if (!analysis) resultAnalysis = "Não analisado";
-    else if (analysis.result) resultAnalysis = `Aceito:${analysis.criterion}`;
-    else resultAnalysis = `Excluído:${analysis.criterion}`;
+    else if (analysis.result)
+      resultAnalysis = `Aceito: ${analysis.criterion.join(", ")}`;
+    else resultAnalysis = `Rejeitado: ${analysis.criterion.join(", ")}`;
 
     let resultReview = "";
     if (!review) resultReview = "Não revisado";
-    else if (review.result) resultReview = `Aceito:${review.criterion}`;
-    else resultReview = `Excluído:${review.criterion}`;
+    else if (review.result)
+      resultReview = `Aceito: ${review.criterion.join(", ")}`;
+    else resultReview = `Rejeitado: ${review.criterion.join(", ")}`;
 
     return { resultAnalysis, resultReview };
   };
@@ -122,7 +124,7 @@ export default class FinalSelection extends Component {
 
               return (
                 <TableRow key={id}>
-                  <TableCell>
+                  <TableCell onClick={event => this.showStatusDialog(id)}>
                     {this.calculateStatus(analysis, review)}
                   </TableCell>
                   <TableCell
