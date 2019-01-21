@@ -51,6 +51,7 @@ export default class FinalResult extends Component {
         >
           <TableViewer
             rows={articles}
+            showFilter={false}
             titles={["Título", "Autor(es)", "Ano", "Base Bibliográfica"]}
             renderRow={({ id }) => {
               const { name, authors, year, base } = article(id);

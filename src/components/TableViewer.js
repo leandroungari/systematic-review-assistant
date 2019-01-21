@@ -16,7 +16,14 @@ import FirstPage from "@material-ui/icons/FirstPage";
 import LastPage from "@material-ui/icons/LastPage";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import { Grid } from "@material-ui/core";
+import {
+  Grid,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio
+} from "@material-ui/core";
 
 export default class TableViewer extends Component {
   constructor(props) {
@@ -24,7 +31,34 @@ export default class TableViewer extends Component {
 
     this.state = {
       page: 0,
-      rowsPerPage: 5
+      rowsPerPage: 5,
+      filter: "all",
+      filters: [
+        {
+          value: "all",
+          action: () => {
+            return true;
+          }
+        },
+        {
+          value: "not-analyse",
+          action: a => {
+            return !a.analysis && !a.review;
+          }
+        },
+        {
+          value: "analyse/not-review",
+          action: a => {
+            return a.analysis && !a.review;
+          }
+        },
+        {
+          value: "review",
+          action: a => {
+            return a.analysis && a.review;
+          }
+        }
+      ]
     };
   }
 
@@ -39,9 +73,50 @@ export default class TableViewer extends Component {
   setPage = value => this.setState({ page: value });
   setRowsPerPage = value => this.setState({ rowsPerPage: value });
 
+  renderFilter = () => {
+    const { showFilter } = this.props;
+    const { filter } = this.state;
+
+    if (!showFilter) return null;
+
+    return (
+      <FormControl style={{ paddingLeft: 30 }}>
+        <FormLabel component="legend">Filtre os resultados:</FormLabel>
+        <RadioGroup
+          style={{ display: "flex", flexDirection: "row" }}
+          value={filter}
+          onChange={event => this.setState({ filter: event.target.value })}
+        >
+          <FormControlLabel value="all" control={<Radio />} label="Todos" />
+          <FormControlLabel
+            value="not-analyse"
+            control={<Radio />}
+            label="Não Analisado"
+          />
+          <FormControlLabel
+            value="analyse/not-review"
+            control={<Radio />}
+            label="Analisado/Não Revisado"
+          />
+          <FormControlLabel
+            value="review"
+            control={<Radio />}
+            label="Revisado"
+          />
+        </RadioGroup>
+      </FormControl>
+    );
+  };
+
   render() {
     const { page, rowsPerPage } = this.state;
     const { rows, titles } = this.props;
+
+    const { filter } = this.state;
+
+    const functionFilter = this.state.filters.filter(
+      ({ value }) => filter === value
+    )[0].action;
 
     if (rows === undefined || rows.length === 0) {
       return (
@@ -59,37 +134,41 @@ export default class TableViewer extends Component {
       );
     } else
       return (
-        <Table>
-          <TableHead>
-            <TableRow>
-              {titles.map((a, index) => (
-                <TableCell key={index}>{a}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(row => this.props.renderRow(row))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                colSpan={3}
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  native: true
-                }}
-                onChangePage={this.changePage}
-                onChangeRowsPerPage={this.changeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
+        <Grid container direction="column">
+          {this.renderFilter()}
+          <Table>
+            <TableHead>
+              <TableRow>
+                {titles.map((a, index) => (
+                  <TableCell key={index}>{a}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .filter(a => functionFilter(a))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(row => this.props.renderRow(row))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  colSpan={3}
+                  count={rows.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    native: true
+                  }}
+                  onChangePage={this.changePage}
+                  onChangeRowsPerPage={this.changeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </Grid>
       );
   }
 }

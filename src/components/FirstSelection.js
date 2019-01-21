@@ -140,6 +140,7 @@ export default class FirstSelection extends Component {
         >
           <TableViewer
             rows={articles}
+            showFilter={true}
             titles={[
               "Status",
               "Título",

@@ -49,6 +49,7 @@ export default class AllStudies extends Component {
         >
           <TableViewer
             rows={articles}
+            showFilter={false}
             titles={[
               "Título",
               "Autor(es)",

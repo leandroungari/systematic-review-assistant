@@ -215,6 +215,9 @@ const setAnalysis = (id, set, result, criterion) => {
 };
 
 const setReview = (id, set, result, criterion) => {
+  if (set === FIRST_SET) setUpdate(SECOND_SET, false);
+  else setUpdate(RESULT_SET, false);
+
   review[set] = review[set].map(a => {
     if (a.id === id) {
       return {

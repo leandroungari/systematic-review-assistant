@@ -138,6 +138,7 @@ export default class FinalSelection extends Component {
         >
           <TableViewer
             rows={articles}
+            showFilter={true}
             titles={[
               "Status",
               "Título",
