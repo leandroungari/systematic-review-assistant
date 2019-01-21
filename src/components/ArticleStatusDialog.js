@@ -13,7 +13,8 @@ import {
   FIRST_SET,
   setReview,
   showSystematicReview,
-  getData
+  getData,
+  getSystematicReview
 } from "../data/Review";
 
 export default class ArticleDialog extends Component {
@@ -30,8 +31,10 @@ export default class ArticleDialog extends Component {
 
   static getDerivedStateFromProps(props, state) {
     const { statusAnalysis, statusReview } = state;
+
     if (props.articleId === "") return null;
-    const { analysis, review } = getData(props.articleId, FIRST_SET);
+
+    const { analysis, review } = getData(props.articleId, props.set);
 
     if (
       props.articleId !== "" &&

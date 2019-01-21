@@ -6,7 +6,12 @@ import Grid from "@material-ui/core/Grid";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Tooltip from "@material-ui/core/Tooltip";
-import { article, RESULT_ACCEPT, RESULT_REJECT } from "../data/Review";
+import {
+  article,
+  RESULT_ACCEPT,
+  RESULT_REJECT,
+  SECOND_SET
+} from "../data/Review";
 
 import DoneAllOutlined from "@material-ui/icons/DoneAllOutlined";
 import DoneOutlined from "@material-ui/icons/DoneOutlined";
@@ -186,6 +191,7 @@ export default class FinalSelection extends Component {
           closeDialog={this.hideStatusDialog}
           visible={isStatusDialogVisible}
           articleId={articleId}
+          set={SECOND_SET}
         />
       </Grid>
     );

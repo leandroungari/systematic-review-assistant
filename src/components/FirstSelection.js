@@ -5,7 +5,13 @@ import TableViewer from "./TableViewer";
 import Grid from "@material-ui/core/Grid";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import { article, RESULT_ACCEPT, RESULT_REJECT, getData } from "../data/Review";
+import {
+  article,
+  RESULT_ACCEPT,
+  RESULT_REJECT,
+  getData,
+  FIRST_SET
+} from "../data/Review";
 
 import DoneAllOutlined from "@material-ui/icons/DoneAllOutlined";
 import DoneOutlined from "@material-ui/icons/DoneOutlined";
@@ -208,6 +214,7 @@ export default class FirstSelection extends Component {
           closeDialog={this.hideStatusDialog}
           visible={isStatusDialogVisible}
           articleId={articleId}
+          set={FIRST_SET}
         />
       </Grid>
     );

@@ -63,6 +63,9 @@ const articles = () => {
 
 const firsts = () => {
   let titles = [];
+  let oldFirst = [];
+  if (review.first !== null && review.first.length > 0) oldFirst = review.first;
+
   review.first = [];
   let baseSet = {};
 
@@ -75,7 +78,20 @@ const firsts = () => {
       review.articles.map(a => a.name === article.name);
     } else {
       titles = [...titles, article.name];
-      review.first = [...review.first, { id: article.id }];
+
+      const result = oldFirst.filter(a => a.id === article.id)[0];
+
+      if (result.analysis && result.review)
+        review.first = [
+          ...review.first,
+          { id: article.id, analysis: result.analysis, review: result.review }
+        ];
+      else if (result.analysis && !result.review)
+        review.first = [
+          ...review.first,
+          { id: article.id, analysis: result.analysis }
+        ];
+      else review.first = [...review.first, { id: article.id }];
     }
   }
 
