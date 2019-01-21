@@ -50,6 +50,7 @@ export default class FinalResult extends Component {
           }}
         >
           <TableViewer
+            width={1450}
             rows={articles}
             showFilter={false}
             titles={["Título", "Autor(es)", "Ano", "Base Bibliográfica"]}

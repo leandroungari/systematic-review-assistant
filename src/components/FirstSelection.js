@@ -145,6 +145,7 @@ export default class FirstSelection extends Component {
           }}
         >
           <TableViewer
+            width={1800}
             rows={articles}
             showFilter={true}
             titles={[

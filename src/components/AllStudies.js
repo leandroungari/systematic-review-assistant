@@ -58,6 +58,7 @@ export default class AllStudies extends Component {
           }}
         >
           <TableViewer
+            width={1350}
             rows={articles}
             showFilter={false}
             titles={[

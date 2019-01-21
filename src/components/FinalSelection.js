@@ -143,6 +143,7 @@ export default class FinalSelection extends Component {
         >
           <TableViewer
             rows={articles}
+            width={1350}
             showFilter={true}
             titles={[
               "Status",

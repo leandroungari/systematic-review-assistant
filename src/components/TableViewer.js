@@ -136,7 +136,7 @@ export default class TableViewer extends Component {
       return (
         <Grid container direction="column">
           {this.renderFilter()}
-          <Table>
+          <Table style={{ width: this.props.width }}>
             <TableHead>
               <TableRow>
                 {titles.map((a, index) => (
