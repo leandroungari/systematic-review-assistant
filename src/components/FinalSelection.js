@@ -10,7 +10,8 @@ import {
   article,
   RESULT_ACCEPT,
   RESULT_REJECT,
-  SECOND_SET
+  SECOND_SET,
+  showSystematicReview
 } from "../data/Review";
 
 import DoneAllOutlined from "@material-ui/icons/DoneAllOutlined";
@@ -156,7 +157,10 @@ export default class FinalSelection extends Component {
 
               return (
                 <TableRow key={id}>
-                  <TableCell onClick={event => this.showStatusDialog(id)}>
+                  <TableCell
+                    style={{ cursor: "pointer" }}
+                    onClick={event => this.showStatusDialog(id)}
+                  >
                     {this.calculateStatus(analysis, review)}
                   </TableCell>
                   <TableCell

@@ -121,6 +121,10 @@ const firsts = () => {
 };
 const seconds = () => {
   if (!review.first) return [];
+
+  let oldSecond = [];
+  if (review.second.length > 0) oldSecond = review.second;
+
   review.second = review.first
     .filter(
       ({ analysis, review }) =>
@@ -129,7 +133,17 @@ const seconds = () => {
         analysis.result === RESULT_ACCEPT &&
         review.result === RESULT_ACCEPT
     )
-    .map(({ id }) => ({ id }));
+    .map(({ id }) => {
+      const result = oldSecond.filter(a => a.id === id)[0];
+
+      if (result) {
+        if (result.analysis && result.review) {
+          return { id, analysis: result.analysis, review: result.review };
+        } else if (result.analysis && !result.review) {
+          return { id, analysis: result.analysis };
+        } else return { id };
+      } else return { id };
+    });
 
   return review.second;
 };

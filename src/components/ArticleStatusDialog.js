@@ -10,7 +10,6 @@ import {
   listAddCriterion,
   listDeleteCriterion,
   setAnalysis,
-  FIRST_SET,
   setReview,
   showSystematicReview,
   getData
@@ -81,7 +80,7 @@ export default class ArticleDialog extends Component {
   }
 
   confirm = () => {
-    const { articleId } = this.props;
+    const { articleId, set } = this.props;
     const {
       statusAnalysis,
       criteriaAnalysis,
@@ -90,10 +89,10 @@ export default class ArticleDialog extends Component {
     } = this.state;
 
     if (statusAnalysis !== "" && criteriaAnalysis.length > 0) {
-      setAnalysis(articleId, FIRST_SET, statusAnalysis, criteriaAnalysis);
+      setAnalysis(articleId, set, statusAnalysis, criteriaAnalysis);
 
       if (statusReview !== "" && criteriaReview.length > 0) {
-        setReview(articleId, FIRST_SET, statusReview, criteriaReview);
+        setReview(articleId, set, statusReview, criteriaReview);
       }
     }
 
