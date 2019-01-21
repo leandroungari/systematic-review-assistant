@@ -10,8 +10,9 @@ export default class SelectOption extends Component {
   constructor(props) {
     super(props);
 
+    const { value } = this.props;
     this.state = {
-      value: ""
+      value: value !== undefined ? value : ""
     };
   }
 

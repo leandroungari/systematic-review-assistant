@@ -19,7 +19,31 @@ import GenerateCSV from "./GenerateCSV";
 import { monthname } from "../data/Date";
 import { getTitle } from "../data/Review";
 
+import StatusDialog from "./ArticleStatusDialog";
+
 export default class FinalSelection extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      articleId: "",
+      articles: this.props.articles(),
+      isStatusDialogVisible: false
+    };
+  }
+
+  showStatusDialog = id =>
+    this.setState({
+      isStatusDialogVisible: true,
+      articleId: id
+    });
+  hideStatusDialog = () => {
+    this.setState({
+      isStatusDialogVisible: false,
+      articles: this.props.articles()
+    });
+  };
+
   processStatus = (analysis, review) => {
     let resultAnalysis = "";
     if (!analysis) resultAnalysis = "Não analisado";
@@ -71,7 +95,7 @@ export default class FinalSelection extends Component {
   };
 
   render() {
-    const { articles } = this.props;
+    const { articles, articleId, isStatusDialogVisible } = this.state;
 
     const date = new Date();
     let filename = `${getTitle()} - Seleção Final - ${monthname(
@@ -158,6 +182,11 @@ export default class FinalSelection extends Component {
             filename={filename}
           />
         </Grid>
+        <StatusDialog
+          closeDialog={this.hideStatusDialog}
+          visible={isStatusDialogVisible}
+          articleId={articleId}
+        />
       </Grid>
     );
   }

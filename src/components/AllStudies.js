@@ -11,8 +11,16 @@ import { monthname } from "../data/Date";
 import { getTitle } from "../data/Review";
 
 export default class AllStudies extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      articles: this.props.articles()
+    };
+  }
+
   render() {
-    const { articles } = this.props;
+    const { articles } = this.state;
 
     const date = new Date();
     let filename = `${getTitle()} - Todos Estudos - ${monthname(

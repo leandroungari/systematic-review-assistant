@@ -141,6 +141,10 @@ const addArticle = (
   ];
 };
 
+const getData = (id, set) => {
+  return review[set].filter(a => a.id === id)[0];
+};
+
 const setAnalysis = (id, set, result, criterion) => {
   review[set] = review[set].map(a => {
     if (a.id === id) {
@@ -191,5 +195,6 @@ export {
   addCriterion,
   deleteCriterion,
   listAddCriterion,
-  listDeleteCriterion
+  listDeleteCriterion,
+  getData
 };

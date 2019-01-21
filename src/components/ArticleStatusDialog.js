@@ -12,7 +12,8 @@ import {
   setAnalysis,
   FIRST_SET,
   setReview,
-  showSystematicReview
+  showSystematicReview,
+  getData
 } from "../data/Review";
 
 export default class ArticleDialog extends Component {
@@ -27,10 +28,36 @@ export default class ArticleDialog extends Component {
     };
   }
 
+  static getDerivedStateFromProps(props, state) {
+    const { statusAnalysis, statusReview } = state;
+    if (props.articleId === "") return null;
+    const { analysis, review } = getData(props.articleId, FIRST_SET);
+
+    if (
+      props.articleId !== "" &&
+      statusAnalysis === "" &&
+      statusReview === ""
+    ) {
+      return {
+        statusAnalysis: analysis ? analysis.result : "",
+        criteriaAnalysis: analysis ? analysis.criterion : [],
+        statusReview: review ? review.result : "",
+        criteriaReview: review ? review.criterion : []
+      };
+    }
+
+    console.log("passou2");
+    if (statusAnalysis !== "" || statusReview !== "") return null;
+
+    return {
+      statusAnalysis: analysis ? analysis.result : "",
+      criteriaAnalysis: analysis ? analysis.criterion : [],
+      statusReview: review ? review.result : "",
+      criteriaReview: review ? review.criterion : []
+    };
+  }
+
   confirm = () => {
-    //fazer o confirmar
-    //transformar em duas colunas o dialog
-    //this.props.articleId
     const { articleId } = this.props;
     const {
       statusAnalysis,
@@ -41,10 +68,9 @@ export default class ArticleDialog extends Component {
 
     if (statusAnalysis !== "" && criteriaAnalysis.length > 0) {
       setAnalysis(articleId, FIRST_SET, statusAnalysis, criteriaAnalysis);
-      console.log("analysis");
+
       if (statusReview !== "" && criteriaReview.length > 0) {
         setReview(articleId, FIRST_SET, statusReview, criteriaReview);
-        console.log("review");
       }
     }
 
@@ -63,7 +89,7 @@ export default class ArticleDialog extends Component {
   };
 
   render() {
-    const { visible, closeDialog } = this.props;
+    const { visible, closeDialog, articleId } = this.props;
     const accept = listAddCriterion();
     const reject = listDeleteCriterion();
 
@@ -90,6 +116,7 @@ export default class ArticleDialog extends Component {
             <Grid container direction="column" style={{ maxWidth: 220 }}>
               <SelectOption
                 label="Análise do Artigo"
+                value={this.state.statusAnalysis}
                 items={[
                   {
                     label: "Aceito",
@@ -147,6 +174,7 @@ export default class ArticleDialog extends Component {
             <Grid container direction="column" style={{ maxWidth: 220 }}>
               <SelectOption
                 label="Revisão do Artigo"
+                value={this.state.statusReview}
                 items={[
                   {
                     label: "Aceito",

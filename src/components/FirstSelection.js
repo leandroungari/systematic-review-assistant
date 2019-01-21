@@ -5,7 +5,7 @@ import TableViewer from "./TableViewer";
 import Grid from "@material-ui/core/Grid";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import { article, RESULT_ACCEPT, RESULT_REJECT } from "../data/Review";
+import { article, RESULT_ACCEPT, RESULT_REJECT, getData } from "../data/Review";
 
 import DoneAllOutlined from "@material-ui/icons/DoneAllOutlined";
 import DoneOutlined from "@material-ui/icons/DoneOutlined";
@@ -28,21 +28,21 @@ export default class FirstSelection extends Component {
 
     this.state = {
       isStatusDialogVisible: false,
-      articleId: ""
+      articleId: "",
+      articles: this.props.articles()
     };
   }
 
-  getSnapshotBeforeUpdate() {
-    console.log("aqui");
-  }
-
   showStatusDialog = id =>
-    this.setState({ isStatusDialogVisible: true, articleId: id });
+    this.setState({
+      isStatusDialogVisible: true,
+      articleId: id
+    });
   hideStatusDialog = () => {
     this.setState({
-      isStatusDialogVisible: false
+      isStatusDialogVisible: false,
+      articles: this.props.articles()
     });
-    this.props.reloadTab();
   };
 
   processStatus = (analysis, review) => {
@@ -96,8 +96,8 @@ export default class FirstSelection extends Component {
   };
 
   render() {
-    const { isStatusDialogVisible, articleId } = this.state;
-    const { articles } = this.props;
+    const { articles, isStatusDialogVisible, articleId } = this.state;
+
     const date = new Date();
     let filename = `${getTitle()} - Seleção Inicial - ${monthname(
       date.getMonth()
