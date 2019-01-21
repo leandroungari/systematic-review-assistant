@@ -1,10 +1,12 @@
 let review = {};
 let baseData = {
+  isArticlesUpdate: true,
   isFirstUpdate: true,
   isSecondUpdate: true,
   isResultUpdate: true
 };
 
+const ARTICLES_SET = "articles";
 const FIRST_SET = "first";
 const SECOND_SET = "second";
 const RESULT_SET = "result";
@@ -103,17 +105,19 @@ const firsts = () => {
 
       const result = oldFirst.filter(a => a.id === article.id)[0];
 
-      if (result.analysis && result.review)
-        review.first = [
-          ...review.first,
-          { id: article.id, analysis: result.analysis, review: result.review }
-        ];
-      else if (result.analysis && !result.review)
-        review.first = [
-          ...review.first,
-          { id: article.id, analysis: result.analysis }
-        ];
-      else review.first = [...review.first, { id: article.id }];
+      if (result) {
+        if (result.analysis && result.review)
+          review.first = [
+            ...review.first,
+            { id: article.id, analysis: result.analysis, review: result.review }
+          ];
+        else if (result.analysis && !result.review)
+          review.first = [
+            ...review.first,
+            { id: article.id, analysis: result.analysis }
+          ];
+        else review.first = [...review.first, { id: article.id }];
+      } else review.first = [...review.first, { id: article.id }];
     }
   }
 
@@ -235,6 +239,8 @@ const setReview = (id, set, result, criterion) => {
 export {
   FIRST_SET,
   SECOND_SET,
+  RESULT_SET,
+  ARTICLES_SET,
   RESULT_ACCEPT,
   RESULT_REJECT,
   init,
@@ -255,5 +261,6 @@ export {
   listAddCriterion,
   listDeleteCriterion,
   getData,
-  isUpdate
+  isUpdate,
+  setUpdate
 };

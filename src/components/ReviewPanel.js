@@ -19,7 +19,9 @@ import {
   seconds,
   results,
   addCriterion,
-  deleteCriterion
+  deleteCriterion,
+  setUpdate,
+  ARTICLES_SET
 } from "../data/Review";
 
 export default class ReviewPanel extends Component {
@@ -92,6 +94,8 @@ export default class ReviewPanel extends Component {
         bibs[index]
       );
     });
+
+    setUpdate(ARTICLES_SET, false);
 
     showSystematicReview();
   };

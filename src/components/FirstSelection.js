@@ -9,7 +9,8 @@ import {
   article,
   RESULT_ACCEPT,
   RESULT_REJECT,
-  FIRST_SET
+  FIRST_SET,
+  setUpdate
 } from "../data/Review";
 
 import DoneAllOutlined from "@material-ui/icons/DoneAllOutlined";
@@ -44,11 +45,16 @@ export default class FirstSelection extends Component {
       articleId: id
     });
   hideStatusDialog = () => {
-    this.setState({
-      isStatusDialogVisible: false,
-      articles: this.props.articles(),
-      articleId: ""
-    });
+    this.setState(
+      {
+        isStatusDialogVisible: false,
+        articles: this.props.articles(),
+        articleId: ""
+      },
+      () => {
+        setUpdate(FIRST_SET, true);
+      }
+    );
   };
 
   processStatus = (analysis, review) => {

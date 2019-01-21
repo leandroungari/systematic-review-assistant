@@ -8,7 +8,7 @@ import { Typography, Link } from "@material-ui/core";
 import GenerateCSV from "./GenerateCSV";
 
 import { monthname } from "../data/Date";
-import { getTitle } from "../data/Review";
+import { getTitle, isUpdate, setUpdate, ARTICLES_SET } from "../data/Review";
 
 export default class AllStudies extends Component {
   constructor(props) {
@@ -17,6 +17,16 @@ export default class AllStudies extends Component {
     this.state = {
       articles: this.props.articles()
     };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (isUpdate()) return null;
+    else {
+      setUpdate(ARTICLES_SET, true);
+      return {
+        articles: props.articles()
+      };
+    }
   }
 
   render() {

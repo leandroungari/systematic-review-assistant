@@ -11,7 +11,7 @@ import {
   RESULT_ACCEPT,
   RESULT_REJECT,
   SECOND_SET,
-  showSystematicReview
+  setUpdate
 } from "../data/Review";
 
 import DoneAllOutlined from "@material-ui/icons/DoneAllOutlined";
@@ -44,10 +44,15 @@ export default class FinalSelection extends Component {
       articleId: id
     });
   hideStatusDialog = () => {
-    this.setState({
-      isStatusDialogVisible: false,
-      articles: this.props.articles()
-    });
+    this.setState(
+      {
+        isStatusDialogVisible: false,
+        articles: this.props.articles()
+      },
+      () => {
+        setUpdate(SECOND_SET, true);
+      }
+    );
   };
 
   processStatus = (analysis, review) => {
