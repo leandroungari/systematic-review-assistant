@@ -73,8 +73,10 @@ export default class FinalSelection extends Component {
         </Tooltip>
       );
     else if (
-      (analysis.result === RESULT_ACCEPT && review.result === RESULT_ACCEPT) ||
-      (analysis.result === RESULT_REJECT && review.result === RESULT_REJECT)
+      analysis &&
+      review &&
+      ((analysis.result === RESULT_ACCEPT && review.result === RESULT_ACCEPT) ||
+        (analysis.result === RESULT_REJECT && review.result === RESULT_REJECT))
     )
       return (
         <Tooltip title="Revisado">
@@ -82,6 +84,7 @@ export default class FinalSelection extends Component {
         </Tooltip>
       );
     else if (
+      analysis &&
       (analysis.result === RESULT_ACCEPT ||
         analysis.result === RESULT_REJECT) &&
       !review

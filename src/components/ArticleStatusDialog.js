@@ -13,8 +13,7 @@ import {
   FIRST_SET,
   setReview,
   showSystematicReview,
-  getData,
-  getSystematicReview
+  getData
 } from "../data/Review";
 
 export default class ArticleDialog extends Component {
@@ -22,6 +21,7 @@ export default class ArticleDialog extends Component {
     super(props);
 
     this.state = {
+      searched: "non-searched",
       statusAnalysis: "",
       criteriaAnalysis: [],
       statusReview: "",
@@ -30,17 +30,37 @@ export default class ArticleDialog extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { statusAnalysis, statusReview } = state;
+    //const { statusAnalysis, statusReview } = state;
 
-    if (props.articleId === "") return null;
+    if (state.searched === "closed") {
+      return {
+        searched: "non-searched",
+        statusAnalysis: "",
+        criteriaAnalysis: [],
+        statusReview: "",
+        criteriaReview: []
+      };
+    } else if (props.articleId === "" || state.searched === "searched") {
+      return null;
+    } else if (props.articleId !== "" && state.searched === "non-searched") {
+      const { analysis, review } = getData(props.articleId, props.set);
 
-    const { analysis, review } = getData(props.articleId, props.set);
-
+      return {
+        searched: "searched",
+        statusAnalysis: analysis ? analysis.result : "",
+        criteriaAnalysis: analysis ? analysis.criterion : [],
+        statusReview: review ? review.result : "",
+        criteriaReview: review ? review.criterion : []
+      };
+    } else return null;
+    /*const { analysis, review } = getData(props.articleId, props.set);
+    console.log(props.articleId, analysis, review);
     if (
       props.articleId !== "" &&
       statusAnalysis === "" &&
       statusReview === ""
     ) {
+
       return {
         statusAnalysis: analysis ? analysis.result : "",
         criteriaAnalysis: analysis ? analysis.criterion : [],
@@ -57,7 +77,7 @@ export default class ArticleDialog extends Component {
       criteriaAnalysis: analysis ? analysis.criterion : [],
       statusReview: review ? review.result : "",
       criteriaReview: review ? review.criterion : []
-    };
+    };*/
   }
 
   confirm = () => {
@@ -83,16 +103,13 @@ export default class ArticleDialog extends Component {
 
   cancel = () => {
     this.setState({
-      statusAnalysis: "",
-      criteriaAnalysis: [],
-      statusReview: "",
-      criteriaReview: []
+      searched: "closed"
     });
     this.props.closeDialog();
   };
 
   render() {
-    const { visible, closeDialog, articleId } = this.props;
+    const { visible, closeDialog } = this.props;
     const accept = listAddCriterion();
     const reject = listDeleteCriterion();
 

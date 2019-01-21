@@ -9,7 +9,6 @@ import {
   article,
   RESULT_ACCEPT,
   RESULT_REJECT,
-  getData,
   FIRST_SET
 } from "../data/Review";
 
@@ -47,7 +46,8 @@ export default class FirstSelection extends Component {
   hideStatusDialog = () => {
     this.setState({
       isStatusDialogVisible: false,
-      articles: this.props.articles()
+      articles: this.props.articles(),
+      articleId: ""
     });
   };
 
@@ -75,8 +75,10 @@ export default class FirstSelection extends Component {
         </Tooltip>
       );
     else if (
-      (analysis.result === RESULT_ACCEPT && review.result === RESULT_ACCEPT) ||
-      (analysis.result === RESULT_REJECT && review.result === RESULT_REJECT)
+      analysis &&
+      review &&
+      ((analysis.result === RESULT_ACCEPT && review.result === RESULT_ACCEPT) ||
+        (analysis.result === RESULT_REJECT && review.result === RESULT_REJECT))
     )
       return (
         <Tooltip title="Revisado">
@@ -84,6 +86,7 @@ export default class FirstSelection extends Component {
         </Tooltip>
       );
     else if (
+      analysis &&
       (analysis.result === RESULT_ACCEPT ||
         analysis.result === RESULT_REJECT) &&
       !review
@@ -159,7 +162,9 @@ export default class FirstSelection extends Component {
                 <TableRow key={id}>
                   <TableCell
                     style={{ cursor: "pointer" }}
-                    onClick={event => this.showStatusDialog(id)}
+                    onClick={event => {
+                      this.showStatusDialog(id);
+                    }}
                   >
                     {this.calculateStatus(analysis, review)}
                   </TableCell>

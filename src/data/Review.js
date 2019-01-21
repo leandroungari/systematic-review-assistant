@@ -1,7 +1,13 @@
 let review = {};
+let baseData = {
+  isFirstUpdate: true,
+  isSecondUpdate: true,
+  isResultUpdate: true
+};
 
 const FIRST_SET = "first";
 const SECOND_SET = "second";
+const RESULT_SET = "result";
 
 const RESULT_ACCEPT = true;
 const RESULT_REJECT = false;
@@ -19,6 +25,22 @@ const init = (title, researchers, description, goals) => {
     second: [],
     result: []
   };
+};
+
+const isUpdate = set => {
+  if (set === FIRST_SET) {
+    return baseData.isFirstUpdate;
+  } else if (set === SECOND_SET) {
+    return baseData.isSecondUpdate;
+  } else return baseData.isResultUpdate;
+};
+
+const setUpdate = (set, value) => {
+  if (set === FIRST_SET) {
+    baseData.isFirstUpdate = value;
+  } else if (set === SECOND_SET) {
+    baseData.isSecondUpdate = value;
+  } else baseData.isResultUpdate = value;
 };
 
 const listAddCriterion = () => {
@@ -105,7 +127,7 @@ const seconds = () => {
         analysis &&
         review &&
         analysis.result === RESULT_ACCEPT &&
-        review.researchers === RESULT_ACCEPT
+        review.result === RESULT_ACCEPT
     )
     .map(({ id }) => ({ id }));
 
@@ -119,7 +141,7 @@ const results = () => {
         analysis &&
         review &&
         analysis.result === RESULT_ACCEPT &&
-        review.researchers === RESULT_ACCEPT
+        review.result === RESULT_ACCEPT
     )
     .map(({ id }) => ({ id }));
 
@@ -162,6 +184,9 @@ const getData = (id, set) => {
 };
 
 const setAnalysis = (id, set, result, criterion) => {
+  if (set === FIRST_SET) setUpdate(SECOND_SET, false);
+  else setUpdate(RESULT_SET, false);
+
   review[set] = review[set].map(a => {
     if (a.id === id) {
       return {
@@ -212,5 +237,6 @@ export {
   deleteCriterion,
   listAddCriterion,
   listDeleteCriterion,
-  getData
+  getData,
+  isUpdate
 };
