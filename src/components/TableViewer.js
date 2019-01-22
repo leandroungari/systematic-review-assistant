@@ -57,6 +57,14 @@ export default class TableViewer extends Component {
           action: a => {
             return a.analysis && a.review;
           }
+        },
+        {
+          value: "indeterminate",
+          action: a => {
+            return (
+              a.analysis && a.review && a.analysis.result !== a.review.result
+            );
+          }
         }
       ]
     };
@@ -102,6 +110,11 @@ export default class TableViewer extends Component {
             value="review"
             control={<Radio />}
             label="Revisado"
+          />
+          <FormControlLabel
+            value="indeterminate"
+            control={<Radio />}
+            label="Indeterminado"
           />
         </RadioGroup>
       </FormControl>
