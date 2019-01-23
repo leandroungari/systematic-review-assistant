@@ -168,7 +168,7 @@ export default class TableViewer extends Component {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, 50, 100]}
                   colSpan={3}
-                  count={rows.length}
+                  count={rows.filter(a => functionFilter(a)).length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{
