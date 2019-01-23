@@ -75,7 +75,7 @@ export default class TableViewer extends Component {
   };
 
   changeRowsPerPage = event => {
-    this.setRowsPerPage(event.target.value);
+    this.setRowsPerPage(Number.parseInt(event.target.value));
   };
 
   setPage = value => this.setState({ page: value });
@@ -166,7 +166,7 @@ export default class TableViewer extends Component {
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  rowsPerPageOptions={[5, 10, 25, 50, 100]}
                   colSpan={3}
                   count={rows.length}
                   rowsPerPage={rowsPerPage}

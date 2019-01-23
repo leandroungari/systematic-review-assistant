@@ -98,9 +98,8 @@ const firsts = () => {
       ...(baseSet[article.name] ? baseSet[article.name] : []),
       article.base
     ];
-    if (titles.includes(article.name)) {
-      review.articles.map(a => a.name === article.name);
-    } else {
+
+    if (!titles.includes(article.name)) {
       titles = [...titles, article.name];
 
       const result = oldFirst.filter(a => a.id === article.id)[0];
@@ -120,6 +119,15 @@ const firsts = () => {
       } else review.first = [...review.first, { id: article.id }];
     }
   }
+
+  console.log(baseSet);
+
+  review.articles = review.articles.map(a => {
+    return {
+      ...a,
+      base: baseSet[a.name]
+    };
+  });
 
   return review.first;
 };

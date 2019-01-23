@@ -10,7 +10,8 @@ import {
   RESULT_ACCEPT,
   RESULT_REJECT,
   FIRST_SET,
-  setUpdate
+  setUpdate,
+  showSystematicReview
 } from "../data/Review";
 
 import DoneAllOutlined from "@material-ui/icons/DoneAllOutlined";
@@ -37,6 +38,8 @@ export default class FirstSelection extends Component {
       articleId: "",
       articles: this.props.articles()
     };
+
+    showSystematicReview();
   }
 
   showStatusDialog = id =>
@@ -129,7 +132,7 @@ export default class FirstSelection extends Component {
         abstract,
         authors,
         year,
-        base: base.join("/"),
+        base,
         analysis: resultAnalysis,
         review: resultReview
       };
@@ -192,7 +195,7 @@ export default class FirstSelection extends Component {
                   </TableCell>
                   <TableCell style={{ minWidth: 250 }}>{authors}</TableCell>
                   <TableCell>{year}</TableCell>
-                  <TableCell>{base.join("/")}</TableCell>
+                  <TableCell>{base.join(", ")}</TableCell>
                   <TableCell>{resultAnalysis}</TableCell>
                   <TableCell>{resultReview}</TableCell>
                 </TableRow>
