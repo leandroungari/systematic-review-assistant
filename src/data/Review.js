@@ -94,13 +94,15 @@ const firsts = () => {
   let baseSet = {};
 
   for (const article of review.articles) {
-    baseSet[article.name] = [
-      ...(baseSet[article.name] ? baseSet[article.name] : []),
+    const articleName = article.name.toLowerCase();
+
+    baseSet[articleName] = [
+      ...(baseSet[articleName] ? baseSet[articleName] : []),
       article.base
     ];
 
-    if (!titles.includes(article.name)) {
-      titles = [...titles, article.name];
+    if (!titles.includes(articleName)) {
+      titles = [...titles, articleName];
 
       const result = oldFirst.filter(a => a.id === article.id)[0];
 
@@ -120,12 +122,10 @@ const firsts = () => {
     }
   }
 
-  console.log(baseSet);
-
   review.articles = review.articles.map(a => {
     return {
       ...a,
-      base: baseSet[a.name]
+      base: baseSet[a.name.toLowerCase()]
     };
   });
 
