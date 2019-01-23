@@ -42,7 +42,7 @@ export default class AllStudies extends Component {
         name,
         authors,
         year,
-        base: base.join("/"),
+        base: base.join(", "),
         booktitle,
         doi
       })

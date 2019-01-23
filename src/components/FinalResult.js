@@ -36,7 +36,7 @@ export default class FinalResult extends Component {
         name,
         authors,
         year,
-        base: base.join("/")
+        base: base.join(", ")
       };
     });
 

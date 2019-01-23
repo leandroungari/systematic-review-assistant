@@ -96,10 +96,9 @@ const firsts = () => {
   for (const article of review.articles) {
     const articleName = article.name.toLowerCase();
 
-    baseSet[articleName] = [
-      ...(baseSet[articleName] ? baseSet[articleName] : []),
-      article.base
-    ];
+    if (!baseSet[articleName]) baseSet[articleName] = [article.base];
+    else if (!baseSet[articleName].includes(article.base))
+      baseSet[articleName].push(article.base);
 
     if (!titles.includes(articleName)) {
       titles = [...titles, articleName];

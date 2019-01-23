@@ -178,7 +178,7 @@ export default class FinalSelection extends Component {
                   </TableCell>
                   <TableCell style={{ minWidth: 250 }}>{authors}</TableCell>
                   <TableCell>{year}</TableCell>
-                  <TableCell>{base.join("/")}</TableCell>
+                  <TableCell>{base.join(", ")}</TableCell>
                   <TableCell>{resultAnalysis}</TableCell>
                   <TableCell>{resultReview}</TableCell>
                 </TableRow>
