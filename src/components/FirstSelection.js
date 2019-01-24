@@ -28,6 +28,7 @@ import { getTitle } from "../data/Review";
 import Link from "@material-ui/core/Link";
 
 import StatusDialog from "./ArticleStatusDialog";
+import EditDialog from "./EditItemDialog";
 
 export default class FirstSelection extends Component {
   constructor(props) {
@@ -35,7 +36,9 @@ export default class FirstSelection extends Component {
 
     this.state = {
       isStatusDialogVisible: false,
+      isEditDialogVisible: false,
       articleId: "",
+      editId: "",
       articles: this.props.articles()
     };
 
@@ -113,8 +116,34 @@ export default class FirstSelection extends Component {
       );
   };
 
+  editItem = id => {
+    this.setState({
+      editId: id,
+      isEditDialogVisible: true
+    });
+  };
+
+  hideEditDialog = () => {
+    this.setState(
+      {
+        isEditDialogVisible: false,
+        articles: this.props.articles(),
+        editId: ""
+      },
+      () => {
+        setUpdate(FIRST_SET, true);
+      }
+    );
+  };
+
   render() {
-    const { articles, isStatusDialogVisible, articleId } = this.state;
+    const {
+      articles,
+      isStatusDialogVisible,
+      articleId,
+      isEditDialogVisible,
+      editId
+    } = this.state;
 
     const date = new Date();
     let filename = `${getTitle()} - Seleção Inicial - ${monthname(
@@ -170,7 +199,7 @@ export default class FirstSelection extends Component {
               );
 
               return (
-                <TableRow key={id}>
+                <TableRow key={id} onDoubleClick={() => this.editItem(id)}>
                   <TableCell
                     style={{ cursor: "pointer" }}
                     onClick={event => {
@@ -231,6 +260,11 @@ export default class FirstSelection extends Component {
           visible={isStatusDialogVisible}
           articleId={articleId}
           set={FIRST_SET}
+        />
+        <EditDialog
+          closeDialog={this.hideEditDialog}
+          visible={isEditDialogVisible}
+          id={editId}
         />
       </Grid>
     );

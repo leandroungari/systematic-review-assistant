@@ -42,7 +42,7 @@ export default class AllStudies extends Component {
         name,
         authors,
         year,
-        base: base.join(", "),
+        base,
         booktitle,
         doi
       })
@@ -81,15 +81,11 @@ export default class AllStudies extends Component {
               bibtex
             }) => {
               return (
-                <TableRow
-                  key={id}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => console.log(id)}
-                >
+                <TableRow key={id}>
                   <TableCell style={{ minWidth: 350 }}>{name}</TableCell>
                   <TableCell style={{ minWidth: 300 }}>{authors}</TableCell>
                   <TableCell>{year}</TableCell>
-                  <TableCell>{base.join("/")}</TableCell>
+                  <TableCell>{base.join(", ")}</TableCell>
                   <TableCell style={{ minWidth: 300 }}>{booktitle}</TableCell>
                   <TableCell>
                     <Typography>

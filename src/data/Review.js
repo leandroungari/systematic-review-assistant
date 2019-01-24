@@ -29,6 +29,12 @@ const init = (title, researchers, description, goals) => {
   };
 };
 
+const updateArticle = (id, data) => {
+  review.articles = review.articles.map(a =>
+    a.id === id ? { ...a, ...data } : a
+  );
+};
+
 const isUpdate = set => {
   if (set === FIRST_SET) {
     return baseData.isFirstUpdate;
@@ -96,9 +102,12 @@ const firsts = () => {
   for (const article of review.articles) {
     const articleName = article.name.toLowerCase();
 
-    if (!baseSet[articleName]) baseSet[articleName] = [article.base];
-    else if (!baseSet[articleName].includes(article.base))
-      baseSet[articleName].push(article.base);
+    if (!baseSet[articleName]) baseSet[articleName] = [...article.base];
+    else {
+      article.base.forEach(a => {
+        if (!baseSet[articleName].includes(a)) baseSet[articleName].push(a);
+      });
+    }
 
     if (!titles.includes(articleName)) {
       titles = [...titles, articleName];
@@ -120,6 +129,8 @@ const firsts = () => {
       } else review.first = [...review.first, { id: article.id }];
     }
   }
+
+  console.log(baseSet);
 
   review.articles = review.articles.map(a => {
     return {
@@ -269,5 +280,6 @@ export {
   listDeleteCriterion,
   getData,
   isUpdate,
-  setUpdate
+  setUpdate,
+  updateArticle
 };
