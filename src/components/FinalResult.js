@@ -21,24 +21,27 @@ export default class FinalResult extends Component {
     };
   }
 
-  render() {
+  finalResult = () => {
     const { articles } = this.state;
 
-    const date = new Date();
-    let filename = `${getTitle()} - Resultado Final - ${monthname(
-      date.getMonth()
-    )} ${date.getDate()}, ${date.getFullYear()} ${date.getHours()}h${date.getMinutes()}min`;
-
-    const data = articles.map(({ id }) => {
+    return articles.map(({ id }) => {
       const { name, authors, year, base } = article(id);
 
       return {
+        id,
         name,
         authors,
         year,
         base: base.join(", ")
       };
     });
+  };
+
+  render() {
+    const date = new Date();
+    let filename = `${getTitle()} - Resultado Final - ${monthname(
+      date.getMonth()
+    )} ${date.getDate()}, ${date.getFullYear()} ${date.getHours()}h${date.getMinutes()}min`;
 
     return (
       <Grid container>
@@ -51,12 +54,15 @@ export default class FinalResult extends Component {
         >
           <TableViewer
             width={1450}
-            rows={articles}
+            rows={this.finalResult()}
             showFilter={false}
-            titles={["Título", "Autor(es)", "Ano", "Base Bibliográfica"]}
-            renderRow={({ id }) => {
-              const { name, authors, year, base } = article(id);
-
+            titles={[
+              { key: "name", value: "Título" },
+              { key: "authors", value: "Autor(es)" },
+              { key: "year", value: "Ano" },
+              { key: "base", value: "Base Bibliográfica" }
+            ]}
+            renderRow={({ id, name, authors, year, base }) => {
               return (
                 <TableRow key={id}>
                   <TableCell
@@ -67,7 +73,7 @@ export default class FinalResult extends Component {
                   </TableCell>
                   <TableCell style={{ minWidth: 250 }}>{authors}</TableCell>
                   <TableCell>{year}</TableCell>
-                  <TableCell>{base.join("/")}</TableCell>
+                  <TableCell>{base}</TableCell>
                 </TableRow>
               );
             }}
@@ -77,13 +83,13 @@ export default class FinalResult extends Component {
           container
           direction="column"
           style={{
-            display: articles.length === 0 ? "none" : "flex",
+            display: this.finalResult().length === 0 ? "none" : "flex",
             padding: "30px 0"
           }}
         >
           <Typography variant="body2">Exportar os dados da tabela</Typography>
           <GenerateCSV
-            source={data}
+            source={this.finalResult()}
             fields={["name", "authors", "year", "base"]}
             filename={filename}
           />

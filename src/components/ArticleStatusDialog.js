@@ -52,31 +52,6 @@ export default class ArticleDialog extends Component {
         criteriaReview: review ? review.criterion : []
       };
     } else return null;
-    /*const { analysis, review } = getData(props.articleId, props.set);
-    console.log(props.articleId, analysis, review);
-    if (
-      props.articleId !== "" &&
-      statusAnalysis === "" &&
-      statusReview === ""
-    ) {
-
-      return {
-        statusAnalysis: analysis ? analysis.result : "",
-        criteriaAnalysis: analysis ? analysis.criterion : [],
-        statusReview: review ? review.result : "",
-        criteriaReview: review ? review.criterion : []
-      };
-    }
-
-    console.log("passou2");
-    if (statusAnalysis !== "" || statusReview !== "") return null;
-
-    return {
-      statusAnalysis: analysis ? analysis.result : "",
-      criteriaAnalysis: analysis ? analysis.criterion : [],
-      statusReview: review ? review.result : "",
-      criteriaReview: review ? review.criterion : []
-    };*/
   }
 
   confirm = () => {
@@ -120,19 +95,20 @@ export default class ArticleDialog extends Component {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            width: 570,
-            padding: "20px 30px 40px 30px",
-            alignItems: "flex-start"
+            width: 600,
+            padding: "10px 20px 30px 20px",
+            alignItems: "center"
           }}
         >
           <Grid
             container
-            justify="space-between"
             direction="row"
+            justify="center"
+            alignItems="flex-start"
             wrap="nowrap"
-            style={{ width: 500 }}
+            style={{ width: 560 }}
           >
-            <Grid container direction="column" style={{ maxWidth: 220 }}>
+            <Grid container direction="column" style={{ padding: 15 }}>
               <SelectOption
                 label="Análise do Artigo"
                 value={this.state.statusAnalysis}
@@ -190,10 +166,11 @@ export default class ArticleDialog extends Component {
                 ))}
               </Grid>
             </Grid>
-            <Grid container direction="column" style={{ maxWidth: 220 }}>
+            <Grid container direction="column" style={{ padding: 15 }}>
               <SelectOption
                 label="Revisão do Artigo"
                 value={this.state.statusReview}
+                wi
                 items={[
                   {
                     label: "Aceito",

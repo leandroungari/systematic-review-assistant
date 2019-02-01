@@ -108,29 +108,42 @@ export default class FinalSelection extends Component {
       );
   };
 
-  render() {
-    const { articles, articleId, isStatusDialogVisible } = this.state;
+  finalSelection = () => {
+    const { articles } = this.state;
 
-    const date = new Date();
-    let filename = `${getTitle()} - Seleção Final - ${monthname(
-      date.getMonth()
-    )} ${date.getDate()}, ${date.getFullYear()} ${date.getHours()}h${date.getMinutes()}min`;
-
-    const data = articles.map(({ id, analysis, review }) => {
+    return articles.map(({ id, analysis, review }) => {
       const { name, authors, year, base } = article(id);
       const { resultAnalysis, resultReview } = this.processStatus(
         analysis,
         review
       );
+
       return {
+        id,
         name,
         authors,
         year,
         base: base.join("/"),
         analysis: resultAnalysis,
-        review: resultReview
+        statusAnalysis: analysis ? true : false,
+        statusReview: review ? true : false,
+        isUndefined:
+          analysis && review && analysis.result !== review.result
+            ? true
+            : false,
+        review: resultReview,
+        icon: this.calculateStatus(analysis, review)
       };
     });
+  };
+
+  render() {
+    const { articleId, isStatusDialogVisible } = this.state;
+
+    const date = new Date();
+    let filename = `${getTitle()} - Seleção Final - ${monthname(
+      date.getMonth()
+    )} ${date.getDate()}, ${date.getFullYear()} ${date.getHours()}h${date.getMinutes()}min`;
 
     return (
       <Grid container>
@@ -142,33 +155,35 @@ export default class FinalSelection extends Component {
           }}
         >
           <TableViewer
-            rows={articles}
+            rows={this.finalSelection()}
             width={1350}
             showFilter={true}
             titles={[
-              "Status",
-              "Título",
-              "Autor(es)",
-              "Ano",
-              "Base Bibliográfica",
-              "Análise",
-              "Revisão da Análise"
+              { key: "status", value: "Status" },
+              { key: "name", value: "Título" },
+              { key: "authors", value: "Autor(es)" },
+              { key: "year", value: "Ano" },
+              { key: "base", value: "Base Bibliográfica" },
+              { key: "analysis", value: "Análise" },
+              { key: "review", value: "Revisão da Análise" }
             ]}
-            renderRow={({ id, analysis, review }) => {
-              const { name, authors, year, base } = article(id);
-
-              const { resultAnalysis, resultReview } = this.processStatus(
-                analysis,
-                review
-              );
-
+            renderRow={({
+              id,
+              name,
+              authors,
+              year,
+              base,
+              analysis,
+              review,
+              icon
+            }) => {
               return (
                 <TableRow key={id}>
                   <TableCell
                     style={{ cursor: "pointer" }}
                     onClick={event => this.showStatusDialog(id)}
                   >
-                    {this.calculateStatus(analysis, review)}
+                    {icon}
                   </TableCell>
                   <TableCell
                     style={{ minWidth: 300, cursor: "pointer" }}
@@ -178,9 +193,9 @@ export default class FinalSelection extends Component {
                   </TableCell>
                   <TableCell style={{ minWidth: 250 }}>{authors}</TableCell>
                   <TableCell>{year}</TableCell>
-                  <TableCell>{base.join(", ")}</TableCell>
-                  <TableCell>{resultAnalysis}</TableCell>
-                  <TableCell>{resultReview}</TableCell>
+                  <TableCell>{base}</TableCell>
+                  <TableCell>{analysis}</TableCell>
+                  <TableCell>{review}</TableCell>
                 </TableRow>
               );
             }}
@@ -190,13 +205,13 @@ export default class FinalSelection extends Component {
           container
           direction="column"
           style={{
-            display: articles.length === 0 ? "none" : "flex",
+            display: this.finalSelection().length === 0 ? "none" : "flex",
             padding: "30px 0"
           }}
         >
           <Typography variant="body2">Exportar os dados da tabela</Typography>
           <GenerateCSV
-            source={data}
+            source={this.finalSelection()}
             fields={["name", "authors", "year", "base", "analysis", "review"]}
             filename={filename}
           />

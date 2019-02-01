@@ -29,16 +29,11 @@ export default class AllStudies extends Component {
     }
   }
 
-  render() {
+  allStudies = () => {
     const { articles } = this.state;
-
-    const date = new Date();
-    let filename = `${getTitle()} - Todos Estudos - ${monthname(
-      date.getMonth()
-    )} ${date.getDate()}, ${date.getFullYear()} ${date.getHours()}h${date.getMinutes()}min`;
-
-    const data = articles.map(
-      ({ name, authors, year, base, booktitle, doi }) => ({
+    return articles.map(
+      ({ id, name, authors, year, base, booktitle, doi }) => ({
+        id,
         name,
         authors,
         year,
@@ -47,6 +42,13 @@ export default class AllStudies extends Component {
         doi
       })
     );
+  };
+
+  render() {
+    const date = new Date();
+    let filename = `${getTitle()} - Todos Estudos - ${monthname(
+      date.getMonth()
+    )} ${date.getDate()}, ${date.getFullYear()} ${date.getHours()}h${date.getMinutes()}min`;
 
     return (
       <Grid container>
@@ -58,28 +60,18 @@ export default class AllStudies extends Component {
           }}
         >
           <TableViewer
-            width={1350}
-            rows={articles}
+            width={1600}
+            rows={this.allStudies()}
             showFilter={false}
             titles={[
-              "Título",
-              "Autor(es)",
-              "Ano",
-              "Base Bibliográfica",
-              "Título do Livro",
-              "DOI"
+              { key: "name", value: "Título" },
+              { key: "authors", value: "Autor(es)" },
+              { key: "year", value: "Ano" },
+              { key: "base", value: "Base Bibliográfica" },
+              { key: "booktitle", value: "Título do Livro" },
+              { key: "doi", value: "DOI" }
             ]}
-            renderRow={({
-              id,
-              name,
-              authors,
-              year,
-              base,
-              abstract,
-              booktitle,
-              doi,
-              bibtex
-            }) => {
+            renderRow={({ id, name, authors, year, base, booktitle, doi }) => {
               return (
                 <TableRow key={id}>
                   <TableCell style={{ minWidth: 350 }}>{name}</TableCell>
@@ -109,13 +101,13 @@ export default class AllStudies extends Component {
           container
           direction="column"
           style={{
-            display: articles.length === 0 ? "none" : "flex",
+            display: this.allStudies().length === 0 ? "none" : "flex",
             padding: "30px 0"
           }}
         >
           <Typography variant="body2">Exportar os dados da tabela</Typography>
           <GenerateCSV
-            source={data}
+            source={this.allStudies()}
             fields={["name", "authors", "year", "base", "booktitle", "doi"]}
             filename={filename}
           />

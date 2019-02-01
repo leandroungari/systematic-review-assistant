@@ -22,7 +22,8 @@ import {
   FormLabel,
   RadioGroup,
   FormControlLabel,
-  Radio
+  Radio,
+  TableSortLabel
 } from "@material-ui/core";
 
 export default class TableViewer extends Component {
@@ -30,40 +31,33 @@ export default class TableViewer extends Component {
     super(props);
 
     this.state = {
+      order: "asc",
+      orderBy: "",
+
       page: 0,
       rowsPerPage: 5,
       filter: "all",
       filters: [
         {
           value: "all",
-          action: () => {
-            return true;
-          }
+          action: () => true
         },
         {
           value: "not-analyse",
-          action: a => {
-            return !a.analysis && !a.review;
-          }
+          action: a => !a.statusAnalysis && !a.statusReview
         },
         {
           value: "analyse/not-review",
-          action: a => {
-            return a.analysis && !a.review;
-          }
+          action: a => a.statusAnalysis && !a.statusReview
         },
         {
           value: "review",
-          action: a => {
-            return a.analysis && a.review;
-          }
+          action: a => a.statusAnalysis && a.statusReview && !a.isUndefined
         },
         {
           value: "indeterminate",
           action: a => {
-            return (
-              a.analysis && a.review && a.analysis.result !== a.review.result
-            );
+            return a.isUndefined;
           }
         }
       ]
@@ -121,8 +115,31 @@ export default class TableViewer extends Component {
     );
   };
 
+  setSortingProperty = property => {
+    if (this.state.orderBy === property) {
+      this.setState({
+        order: this.state.order === "asc" ? "desc" : "asc"
+      });
+    } else {
+      this.setState({
+        orderBy: property
+      });
+    }
+  };
+
+  sorting = data => {
+    const { orderBy, order } = this.state;
+
+    if (orderBy === "" || orderBy === "status") return data;
+    return data.sort((a, b) => {
+      if (a[orderBy] < b[orderBy]) return order === "asc" ? -1 : 1;
+      else if (a[orderBy] > b[orderBy]) return order === "asc" ? 1 : -1;
+      return 0;
+    });
+  };
+
   render() {
-    const { page, rowsPerPage } = this.state;
+    const { page, rowsPerPage, order, orderBy } = this.state;
     const { rows, titles } = this.props;
 
     const { filter } = this.state;
@@ -153,12 +170,20 @@ export default class TableViewer extends Component {
             <TableHead>
               <TableRow>
                 {titles.map((a, index) => (
-                  <TableCell key={index}>{a}</TableCell>
+                  <TableCell key={index} style={{ cursor: "pointer" }}>
+                    <TableSortLabel
+                      active={orderBy === a.key}
+                      direction={order}
+                      onClick={() => this.setSortingProperty(a.key)}
+                    >
+                      {a.value}
+                    </TableSortLabel>
+                  </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
+              {this.sorting(rows)
                 .filter(a => functionFilter(a))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => this.props.renderRow(row))}

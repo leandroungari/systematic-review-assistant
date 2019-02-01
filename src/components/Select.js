@@ -36,10 +36,12 @@ export default class SelectOption extends Component {
         <Select
           value={value}
           onChange={this.handleChange}
+          autoWidth={false}
           inputProps={{
             name: "age",
             id: "age-simple"
           }}
+          style={{ width: 250 }}
         >
           {this.props.items.map(({ label, value }, index) => (
             <MenuItem key={index} value={value}>

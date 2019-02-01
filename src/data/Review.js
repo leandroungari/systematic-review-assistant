@@ -84,7 +84,7 @@ const deleteCriterion = criteria => {
 };
 
 const showSystematicReview = () => {
-  console.log(review);
+  //console.log(review);
 };
 
 const articles = () => {
@@ -129,8 +129,6 @@ const firsts = () => {
       } else review.first = [...review.first, { id: article.id }];
     }
   }
-
-  console.log(baseSet);
 
   review.articles = review.articles.map(a => {
     return {
