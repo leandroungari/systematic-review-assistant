@@ -22,7 +22,7 @@ yarn start                  //npm start
 ```
 
 
-## Used Technologie
+## Used Technologies
 * [React JS](https://reactjs.org/)
 * [Material UI](https://material-ui.com/)
 * [BibTex Parse JS](https://www.npmjs.com/package/bibtex-parse-js)
